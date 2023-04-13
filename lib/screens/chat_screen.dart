@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/helpers/constants.dart';
 import 'package:flutter_chatgpt/services/assets_manager.dart';
+import 'package:flutter_chatgpt/services/services.dart';
 import 'package:flutter_chatgpt/widgets/chat_widget.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -34,14 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
           actions: [
             IconButton(
                 onPressed: () async {
-                  await showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Row(
-                        children: const [Text('Elegir Modelo: ')],
-                      );
-                    },
-                  );
+                  await Services.showModalSheet(context: context);
                 },
                 icon: const Icon(
                   Icons.more_vert_rounded,
