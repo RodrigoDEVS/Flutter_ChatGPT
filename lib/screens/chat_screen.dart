@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/helpers/constants.dart';
+import 'package:flutter_chatgpt/services/api_services.dart';
 import 'package:flutter_chatgpt/services/assets_manager.dart';
 import 'package:flutter_chatgpt/services/services.dart';
 import 'package:flutter_chatgpt/widgets/chat_widget.dart';
@@ -84,7 +85,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.send),
                         color: Colors.white,
-                        onPressed: () {},
+                        onPressed: () async {
+                          await ApiServices.getModels();
+                        },
                       )),
                   style: const TextStyle(color: Colors.white),
                   controller: chatController,

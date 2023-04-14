@@ -13,6 +13,7 @@ class Services {
         return Padding(
           padding: const EdgeInsets.only(bottom: 30, top: 16, left: 16),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
               Text(
                 'Elegir Modelo: ',
