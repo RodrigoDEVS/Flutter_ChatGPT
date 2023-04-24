@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/helpers/constants.dart';
-import 'package:flutter_chatgpt/models/chat_model.dart';
 import 'package:flutter_chatgpt/models/message_model.dart';
 import 'package:flutter_chatgpt/provider/chat_provider.dart';
 import 'package:flutter_chatgpt/provider/models_provider.dart';
-import 'package:flutter_chatgpt/services/api_services.dart';
 import 'package:flutter_chatgpt/services/assets_manager.dart';
 import 'package:flutter_chatgpt/services/services.dart';
 import 'package:flutter_chatgpt/widgets/chat_widget.dart';
@@ -22,7 +20,6 @@ class _ChatScreenState extends State<ChatScreen> {
   late TextEditingController chatController;
   late ScrollController chatScrollController;
   bool _isTyping = false;
-  List<Choice> chatList = [];
   late FocusNode focusNode;
 
   @override
@@ -31,7 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
     chatController = TextEditingController();
     chatScrollController = ScrollController();
     focusNode = FocusNode();
-    WidgetsBinding.instance!.addPersistentFrameCallback((_) => _scrollDown());
+    //WidgetsBinding.instance.addPersistentFrameCallback((_) => _scrollDown());
   }
 
   @override
@@ -67,7 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Flexible(
+            Expanded(
               child: ListView.builder(
                 controller: chatScrollController,
                 itemCount: chatProvider.getChatList.length,
@@ -143,26 +140,24 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> sendMessage(
       {required ModelsProvider modelsProvider,
       required ChatProvider chatProvider}) async {
-    //Mensaje del usuario
-    var message = MessageModel(
-        model: modelsProvider.currentModel,
-        messages: [Messages(role: 'user', content: chatController.text)]);
-    setState(() {
-      //Agregando el mensaje del usuario a la lista
-      // chatList.add(Choice(
-      //     index: 0,
-      //     message: Message(role: 'user', content: chatController.text)));
-      chatProvider.addUserMsg(userMsg: message.messages![0]);
-      chatController.clear();
-      focusNode.unfocus();
-    });
-    // chatList.addAll(await ApiServices.sendMessage(message));
-    await chatProvider.sendMessageAndGetAnswer(
-        chatList: chatProvider.getChatList, currentModel: message.model!);
-
-    _scrollDown();
-
-    setState(() {});
+    try {
+//Mensaje del usuario
+      var message = MessageModel(
+          model: modelsProvider.currentModel,
+          messages: [Messages(role: 'user', content: chatController.text)]);
+      setState(() {
+        //Agregando el mensaje del usuario a la lista
+        chatProvider.addUserMsg(userMsg: message.messages![0]);
+        chatController.clear();
+        focusNode.unfocus();
+      });
+      await chatProvider.sendMessageAndGetAnswer(
+          chatList: chatProvider.getChatList, currentModel: message.model!);
+      setState(() {});
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(backgroundColor: Colors.red, content: Text('Error: $e')));
+    }
   }
 
   _scrollDown() {

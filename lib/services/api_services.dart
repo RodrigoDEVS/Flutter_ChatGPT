@@ -56,48 +56,12 @@ class ApiServices {
         return Choice(
             message: Message(
                 role: respuesta.choices?[index].message?.role,
-                content: respuesta.choices?[index].message?.content),
+                content: Utf8Decoder().convert(respuesta
+                    .choices?[index].message?.content?.codeUnits as List<int>)),
             index: 1);
       });
     }
 
     return chatList;
   }
-
-  // static Future<List<Choice>> sendMessage(MessageModel message) async {
-  //   var response;
-  //   String encodedMessage = jsonEncode(message.toJson());
-  //   List<Choice> chatList = [];
-  //   try {
-  //     response = await http.post(
-  //         Uri.parse('https://api.openai.com/v1/chat/completions'),
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'Authorization': 'Bearer $api'
-  //         },
-  //         body: encodedMessage);
-
-  //     Map jsonResponse = jsonDecode(response.body);
-
-  //     if (jsonResponse['error'] != null) {
-  //       throw HttpException(jsonResponse['error']['message']);
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  //   Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-  //   ChatResponse respuesta = ChatResponse.fromMap(jsonResponse);
-  //   print(respuesta.choices?[0].message?.content);
-  //   if (respuesta.choices!.isNotEmpty) {
-  //     chatList = List.generate(respuesta.choices!.length, (index) {
-  //       return Choice(
-  //           message: Message(
-  //               role: respuesta.choices?[index].message?.role,
-  //               content: respuesta.choices?[index].message?.content),
-  //           index: 1);
-  //     });
-  //   }
-
-  //   return chatList;
-  // }
 }

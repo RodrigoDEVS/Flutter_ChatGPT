@@ -4,13 +4,6 @@ import 'package:flutter_chatgpt/models/message_model.dart';
 import 'package:flutter_chatgpt/services/api_services.dart';
 
 class ChatProvider with ChangeNotifier {
-  //Listado de Mensajes para enviar a la API
-  List<MessageModel> messageList = [];
-
-  List<MessageModel> get getMessageList {
-    return messageList;
-  }
-
   //Listado de Mensajes para el Chat
   List<Messages> chatList = [];
 
@@ -21,13 +14,6 @@ class ChatProvider with ChangeNotifier {
   addUserMsg({required Messages userMsg}) {
     chatList.add(userMsg);
     notifyListeners();
-    print(chatList.length);
-  }
-
-  List<MessageModel> setChatList(
-      {required String model, required List<Messages> chatList}) {
-    messageList.add(MessageModel(model: model, messages: chatList));
-    return messageList;
   }
 
   Future<void> sendMessageAndGetAnswer(
